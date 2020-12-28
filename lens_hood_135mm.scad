@@ -1,20 +1,35 @@
 $fa = 1;
 $fs = 0.4;
-id_bottom = 82.5;
+id_bottom = 82.6;
 id_top = id_bottom + 10;
 radius_bottom = id_bottom/2;
 radius_top = id_top/2;
 hood_thickness = 2;
-hood_length = 16;
+hood_length = 15;
 flange_height = 1.6;
 flange_thickness = 1.5;
 flange_length = 52.5;
+base_height = flange_height * 4;
+
+module hood_base() {
+    difference() {
+    cylinder(h=base_height, r=id_bottom/2 + hood_thickness);
+    translate([0,0,-1])
+        cylinder(h=hood_length+2, r=id_bottom/2);
+    }
+    flange();
+    translate([0,0,flange_height * 2])
+      rotate([0,0,90])
+        flange();
+
+}
 
 module hood_body() {
+    translate([0,0,base_height])
     difference() {
     cylinder(h=hood_length, r1=id_bottom/2 + hood_thickness, r2=id_top/2 + hood_thickness);
     translate([0,0,-1])
-        cylinder(h=hood_length+2, r=id_bottom/2);
+        cylinder(h=hood_length+2, r1=id_bottom/2, r2=id_top/2);
     }
 }
 module flange() {
@@ -37,9 +52,9 @@ module flange() {
 
 module baffles() {
     // Baffles
-    baffle_height = 3;
-    baffle_expansion = radius_top / radius_bottom;
+    baffle_height = 2;
     radius_difference = radius_top - radius_bottom;
+    echo(radius_difference=radius_difference);
     baffle_shape = [
         [0, 0], 
         [-baffle_height, baffle_height], 
@@ -47,20 +62,18 @@ module baffles() {
         [-hood_thickness, 0]
     ];
     
-    for (lp = [baffle_height : baffle_height : hood_length]) {
+    for (lp = [base_height : baffle_height : hood_length+1]) {
+        echo("baffle translate: ", radius_bottom + (radius_difference * lp / hood_length));
         translate([0, 0, lp]) 
             rotate_extrude(angle = 360) 
                 translate(
-                    [radius_bottom + hood_thickness + (radius_difference * lp / hood_length), 
+                    [radius_bottom + (radius_difference * (lp-baffle_height) / hood_length), 
                     0, 
                     0]) 
                     polygon(points = baffle_shape);
     }
 }
 
+hood_base();
 hood_body();
-flange();
-translate([0,0,3])
-  rotate([0,0,90])
-    flange();
 baffles();
