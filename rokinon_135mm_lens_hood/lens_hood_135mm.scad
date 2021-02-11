@@ -76,7 +76,7 @@ module baffles() {
                     polygon(points = baffle_shape);
     }
 }
-//flange();
+flange();
 hood_mount();
 hood_transition();
 hood_body();
