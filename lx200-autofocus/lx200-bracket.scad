@@ -2,9 +2,9 @@ $fa = 1;
 $fs = 0.4;
 
 screw_shaft=3.5;
-screw_head=5;
+screw_head=6.5;
 screw_shaft_hole=screw_shaft+0.2;
-screw_head_hole=screw_head+0.2;
+screw_head_hole=screw_head+0.1;
 
 module focuser_knob_mount() {
   translate([0,50,0]) {
@@ -16,13 +16,13 @@ module focuser_knob_mount() {
 
 module mount_holes(size, z_offset=0) {
     rotate(90) 
-      translate([16.25,0,z_offset]) 
+      translate([16.32,0,z_offset]) 
         cylinder(r = size, h = 12);
     rotate(90+120) 
-      translate([16.25,0,z_offset]) 
+      translate([16.32,0,z_offset]) 
         cylinder(r = size, h = 12);
     rotate(90+240) 
-      translate([16.25,0,z_offset]) 
+      translate([16.32,0,z_offset]) 
         cylinder(r = size, h = 12);
 }
 
